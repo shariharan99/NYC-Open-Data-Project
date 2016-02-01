@@ -1,0 +1,22 @@
+all: hw3.html
+
+hw3.html: hw3.Rmd final_df.Rdata boroughs.json poly.png traffic.png
+	Rscript -e "library(rmarkdown);render('hw3.Rmd')"
+
+final_df.Rdata: Geocoding.R 
+	R --no-save < Geocoding.R
+
+boroughs.json: Borough_Mapping.R final_df.Rdata
+	R --no-save < Borough_Mapping.R
+
+poly.png: Borough_Mapping.R final_df.Rdata
+	R --no-save < Borough_Mapping.R
+
+traffic.png: Visualization.R
+	R --no-save < Visualization.R
+
+clean:
+	rm -f hw3.html final_df.Rdata traffic.png
+
+.PHONY: all clean
+
